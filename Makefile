@@ -4,10 +4,16 @@ help:
 	@echo "To really commence the build, which can cause significant changes to your runtime environment,"
 	@echo "please type one of the following commands to confirm the build."
 	@echo
+	@echo " - make clean :: Remove all build artifacts."
+	@echo "                 DOES NOT uninstall previously installed packages."
 	@echo " - make debian :: Build software on a Debian(-like/-derived) host OS."
 
+.phony: clean
+clean:
+	rm -rf boolector extavy opt SymbiYosys yices2 yosys z3
+
 .phony: debian
-debian: deb-deps generic-deps
+debian: deb-deps src-deps
 
 .phony: deb-deps
 deb-deps: deb-virtualenv3 deb-sby-deps
@@ -24,8 +30,8 @@ deb-python3:
 deb-sby-deps:
 	sudo apt-get install build-essential clang bison flex libreadline-dev gawk tcl-dev libffi-dev git mercurial graphviz xdot pkg-config python python3 libftdi-dev gperf libboost-program-options-dev autoconf libgmp-dev cmake
 
-.phony: generic-deps
-generic-deps: nmigen symbiyosys yices2 z3 avy boolector
+.phony: src-deps
+src-deps: nmigen symbiyosys yices2 z3 avy boolector
 
 nmigen: opt
 	(cd opt; git clone git@github.com:m-labs/nmigen)
