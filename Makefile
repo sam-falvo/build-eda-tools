@@ -46,10 +46,10 @@ z3: z3-git
 	(cd z3 && python scripts/mk_make.py && cd build && make -j$(nproc) && sudo make install)
 
 avy: avy-git
-	(cd extavy && git submodule update --init && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make -j$(nproc) && sudo cp avy/src/{avy,avybmc} /usr/local/bin/)
+	(cd extavy && git submodule update --init && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make -j$(nproc) && sudo cp avy/src/avy /usr/local/bin/ && sudo cp avy/src/avybmc /usr/local/bin/)
 
 boolector: boolector-git
-	(cd boolector && ./contrib/setup-btor2tools.sh && ./contrib/setup-lingeling.sh && ./configure.sh && make -C build -j$(nproc) && sudo cp build/bin/{boolector,btor*} /usr/local/bin/ && sudo cp deps/btor2tools/bin/btorsim /usr/local/bin/)
+	(cd boolector && ./contrib/setup-btor2tools.sh && ./contrib/setup-lingeling.sh && ./configure.sh && make -C build -j$(nproc) && sudo cp build/bin/boolector /usr/local/bin && sudo cp build/bin/btor* /usr/local/bin/ && sudo cp deps/btor2tools/bin/btorsim /usr/local/bin/)
 
 yosys-git:
 	git clone git@github.com:YosysHQ/yosys.git yosys
