@@ -16,7 +16,7 @@ clean:
 debian: deb-deps src-deps
 
 .phony: deb-deps
-deb-deps: deb-virtualenv3 deb-sby-deps
+deb-deps: deb-virtualenv3 deb-sby-deps deb-nextpnr-deps
 
 .phony: deb-virtualenv3
 deb-virtualenv3: deb-python3
@@ -28,7 +28,11 @@ deb-python3:
 
 .phony: deb-sby-deps
 deb-sby-deps:
-	sudo apt-get install build-essential clang bison flex libreadline-dev gawk tcl-dev libffi-dev git mercurial graphviz xdot pkg-config python python3 libftdi-dev gperf libboost-program-options-dev autoconf libgmp-dev cmake
+	sudo apt install build-essential clang bison flex libreadline-dev gawk tcl-dev libffi-dev git mercurial graphviz xdot pkg-config python python3 libftdi-dev gperf libboost-program-options-dev autoconf libgmp-dev cmake
+
+.phony: deb-nextpnr-deps
+deb-nextpnr-deps:
+	sudo apt install cmake clang-format qt5-default python3-dev libboost-all-dev libeigen3-dev
 
 .phony: src-deps
 src-deps: nmigen symbiyosys yices2 z3 avy boolector
