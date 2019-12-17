@@ -10,7 +10,7 @@ help:
 
 .phony: clean
 clean:
-	rm -rf boolector extavy opt SymbiYosys yices2 yosys z3
+	rm -rf boolector extavy opt SymbiYosys yices2 yosys z3 icestorm prjtrellis nextpnr
 
 .phony: debian
 debian: deb-deps src-deps
@@ -35,7 +35,7 @@ deb-nextpnr-deps:
 	sudo apt install cmake clang-format qt5-default python3-dev libboost-all-dev libeigen3-dev
 
 .phony: src-deps
-src-deps: nmigen symbiyosys yices2 z3 avy boolector icestorm nextpnr
+src-deps: nmigen symbiyosys yices2 z3 avy boolector nextpnr
 
 nmigen: opt
 	(cd opt; git clone git@github.com:m-labs/nmigen)
@@ -64,8 +64,12 @@ boolector: boolector-git
 icestorm: icestorm-git
 	(cd icestorm && make -j$(nproc) && sudo make install)
 
-nextpnr: nextpnr-git
+prjtrellis: prjtrellis-git
+	(cd prjtrellis/libtrellis && cmake -DCMAKE_INSTALL_PREFIX=/usr . && make && sudo make install)
+
+nextpnr: icestorm prjtrellis nextpnr-git
 	(cd nextpnr && cmake -DARCH=ice40 -DCMAKE_INSTALL_PREFIX=/usr/local . && make -j$(nproc) && sudo make install)
+	(cd nextpnr && cmake -DARCH=ecp5 -DTRELLIS_ROOT=../prjtrellis . && make -j$(nproc) && sudo make install)
 
 yosys-git:
 	git clone git@github.com:YosysHQ/yosys
@@ -90,3 +94,6 @@ icestorm-git:
 
 nextpnr-git:
 	git clone https://github.com/YosysHQ/nextpnr
+
+prjtrellis-git:
+	git clone --recursive https://github.com/SymbiFlow/prjtrellis
