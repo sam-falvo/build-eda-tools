@@ -10,13 +10,13 @@ help:
 
 .phony: clean
 clean:
-	rm -rf boolector extavy opt SymbiYosys yices2 yosys z3 icestorm prjtrellis nextpnr
+	rm -rf boolector extavy opt SymbiYosys yices2 yosys z3 icestorm prjtrellis nextpnr verilator
 
 .phony: debian
 debian: deb-deps src-deps
 
 .phony: deb-deps
-deb-deps: deb-virtualenv3 deb-sby-deps deb-nextpnr-deps
+deb-deps: deb-virtualenv3 deb-sby-deps deb-nextpnr-deps deb-gtkwave
 
 .phony: deb-virtualenv3
 deb-virtualenv3: deb-python3
@@ -34,8 +34,12 @@ deb-sby-deps:
 deb-nextpnr-deps:
 	sudo apt install cmake clang-format qt5-default python3-dev libboost-all-dev libeigen3-dev
 
+.phony: deb-gtkwave
+deb-gtkwave:
+	sudo apt install gtkwave
+
 .phony: src-deps
-src-deps: nmigen symbiyosys yices2 z3 avy boolector nextpnr verilator
+src-deps: nmigen symbiyosys yices2 z3 avy boolector nextpnr verilator gtkwave
 
 nmigen: opt
 	(cd opt; git clone git@github.com:m-labs/nmigen)
