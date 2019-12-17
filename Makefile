@@ -35,7 +35,7 @@ deb-nextpnr-deps:
 	sudo apt install cmake clang-format qt5-default python3-dev libboost-all-dev libeigen3-dev
 
 .phony: src-deps
-src-deps: nmigen symbiyosys yices2 z3 avy boolector nextpnr
+src-deps: nmigen symbiyosys yices2 z3 avy boolector nextpnr verilator
 
 nmigen: opt
 	(cd opt; git clone git@github.com:m-labs/nmigen)
@@ -70,6 +70,12 @@ prjtrellis: prjtrellis-git
 nextpnr: icestorm prjtrellis nextpnr-git
 	(cd nextpnr && cmake -DARCH=ice40 -DCMAKE_INSTALL_PREFIX=/usr/local . && make -j$(nproc) && sudo make install)
 	(cd nextpnr && cmake -DARCH=ecp5 -DTRELLIS_ROOT=../prjtrellis . && make -j$(nproc) && sudo make install)
+
+verilator: verilator-git
+	(unset VERILATOR_ROOT && cd verilator && git checkout stable && autoconf && ./configure && make && sudo make install)
+
+verilator-git:
+	git clone https://git.veripool.org/git/verilator
 
 yosys-git:
 	git clone git@github.com:YosysHQ/yosys
