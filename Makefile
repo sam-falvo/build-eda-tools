@@ -35,7 +35,7 @@ deb-nextpnr-deps:
 	sudo apt install cmake clang-format qt5-default python3-dev libboost-all-dev libeigen3-dev
 
 .phony: src-deps
-src-deps: nmigen symbiyosys yices2 z3 avy boolector
+src-deps: nmigen symbiyosys yices2 z3 avy boolector icestorm nextpnr
 
 nmigen: opt
 	(cd opt; git clone git@github.com:m-labs/nmigen)
@@ -61,20 +61,32 @@ avy: avy-git
 boolector: boolector-git
 	(cd boolector && ./contrib/setup-btor2tools.sh && ./contrib/setup-lingeling.sh && ./configure.sh && make -C build -j$(nproc) && sudo cp build/bin/boolector /usr/local/bin && sudo cp build/bin/btor* /usr/local/bin/ && sudo cp deps/btor2tools/bin/btorsim /usr/local/bin/)
 
+icestorm: icestorm-git
+	(cd icestorm && make -j$(nproc) && sudo make install)
+
+nextpnr: nextpnr-git
+	(cd nextpnr && cmake -DARCH=ice40 -DCMAKE_INSTALL_PREFIX=/usr/local . && make -j$(nproc) && sudo make install)
+
 yosys-git:
-	git clone git@github.com:YosysHQ/yosys.git yosys
+	git clone git@github.com:YosysHQ/yosys
 
 symbiyosys-git:
-	git clone git@github.com:YosysHQ/SymbiYosys.git SymbiYosys
+	git clone git@github.com:YosysHQ/SymbiYosys
 
 yices2-git:
-	git clone https://github.com/SRI-CSL/yices2.git yices2
+	git clone https://github.com/SRI-CSL/yices2
 
 z3-git:
-	git clone https://github.com/Z3Prover/z3.git z3
+	git clone https://github.com/Z3Prover/z3
 
 avy-git:
-	git clone https://bitbucket.org/arieg/extavy.git
+	git clone https://bitbucket.org/arieg/extavy
 
 boolector-git:
 	git clone https://github.com/boolector/boolector
+
+icestorm-git:
+	git clone https://github.com/cliffordwolf/icestorm
+
+nextpnr-git:
+	git clone https://github.com/YosysHQ/nextpnr
