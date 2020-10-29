@@ -39,7 +39,7 @@ deb-gtkwave:
 	sudo apt install gtkwave
 
 .phony: src-deps
-src-deps: nmigen symbiyosys yices2 z3 avy boolector nextpnr verilator gtkwave
+src-deps: nmigen symbiyosys yices2 z3 avy boolector nextpnr verilator
 
 nmigen: opt
 	(cd opt; git clone git@github.com:m-labs/nmigen)
