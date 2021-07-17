@@ -32,7 +32,7 @@ deb-sby-deps:
 
 .phony: deb-nextpnr-deps
 deb-nextpnr-deps:
-	sudo apt install cmake clang-format qt5-default python3-dev libboost-all-dev libeigen3-dev
+	sudo apt install cmake clang-format python3-dev libboost-all-dev libeigen3-dev
 
 .phony: deb-gtkwave
 deb-gtkwave:
