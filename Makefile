@@ -39,45 +39,51 @@ deb-gtkwave:
 	sudo apt install gtkwave
 
 .phony: src-deps
-#src-deps: nmigen symbiyosys yices2 z3 avy boolector nextpnr verilator
-src-deps: nmigen symbiyosys yices2 z3 boolector nextpnr verilator
+src-deps: built-nmigen built-symbiyosys built-yices2 built-z3 built-boolector built-nextpnr built-verilator
 
-nmigen: opt
+built-nmigen: opt
 	(cd opt; git clone git@github.com:m-labs/nmigen)
+	touch built-nmigen
 
 opt:
 	mkdir -p opt
 
-yosys: yosys-git
+built-yosys: yosys-git
 	(cd yosys && make -j$(nproc) && sudo make install)
+	touch built-yosys
 
-symbiyosys: yosys symbiyosys-git
+built-symbiyosys: built-yosys symbiyosys-git
 	(cd SymbiYosys && sudo make install)
+	touch built-symbiyosys
 
-yices2: yices2-git
+built-yices2: yices2-git
 	(cd yices2 && autoconf && ./configure && make -j$(nproc) && sudo make install)
+	touch built-yices2
 
-z3: z3-git
+built-z3: z3-git
 	(cd z3 && python scripts/mk_make.py && cd build && make -j$(nproc) && sudo make install)
+	touch built-z3
 
-#avy: avy-git
-#	(cd extavy && git submodule update --init && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build . && sudo cp avy/src/avy /usr/local/bin/ && sudo cp avy/src/avybmc /usr/local/bin/)
-
-boolector: boolector-git
+built-boolector: boolector-git
 	(cd boolector && ./contrib/setup-btor2tools.sh && ./contrib/setup-lingeling.sh && ./configure.sh && make -C build -j$(nproc) && sudo cp build/bin/boolector /usr/local/bin && sudo cp build/bin/btor* /usr/local/bin/ && sudo cp deps/btor2tools/bin/btorsim /usr/local/bin/)
+	touch built-boolector
 
-icestorm: icestorm-git
+built-icestorm: icestorm-git
 	(cd icestorm && make -j$(nproc) && sudo make install)
+	touch built-icestorm
 
-prjtrellis: prjtrellis-git
+built-prjtrellis: prjtrellis-git
 	(cd prjtrellis/libtrellis && cmake -DCMAKE_INSTALL_PREFIX=/usr . && make && sudo make install)
+	touch built-prjtrellis
 
-nextpnr: icestorm prjtrellis nextpnr-git
+built-nextpnr: built-icestorm built-prjtrellis nextpnr-git
 	(cd nextpnr && cmake -DARCH=ice40 -DCMAKE_INSTALL_PREFIX=/usr/local . && make -j$(nproc) && sudo make install)
 	(cd nextpnr && cmake -DARCH=ecp5 -DTRELLIS_INSTALL_PREFIX=/usr . && make -j$(nproc) && sudo make install)
+	touch built-nextpnr
 
-verilator: verilator-git
+built-verilator: verilator-git
 	(unset VERILATOR_ROOT && cd verilator && git checkout stable && autoconf && ./configure && make && sudo make install)
+	touch built-verilator
 
 verilator-git:
 	git clone https://git.veripool.org/git/verilator
